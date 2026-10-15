@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Speed Video Download</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #10172a, #172554);
+      color: white;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%;
+      max-width: 560px;
+      background: #ffffff12;
+      border: 1px solid #ffffff30;
+      border-radius: 20px;
+      padding: 30px 22px;
+      text-align: center;
+      box-shadow: 0 15px 50px #0004;
+    }
+    .logo { font-size: 48px; }
+    h1 { font-size: 30px; margin: 12px 0; }
+    h1 span { color: #38bdf8; }
+    p { color: #dbeafe; line-height: 1.6; }
+    input {
+      width: 100%;
+      padding: 16px;
+      border-radius: 10px;
+      border: 1px solid #94a3b8;
+      margin: 18px 0 12px;
+      font-size: 16px;
+    }
+    button, .download {
+      display: inline-block;
+      border: 0;
+      border-radius: 10px;
+      padding: 14px 20px;
+      background: #0ea5e9;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .download { background: #16a34a; margin-top: 12px; }
+    #result { margin-top: 12px; overflow-wrap: anywhere; }
+    .note { font-size: 13px; color: #cbd5e1; margin-top: 24px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">⚡</div>
+    <h1>Speed <span>Video</span> Download</h1>
+    <p>Paste a direct video link to open or download your video.</p>
+
+    <form id="videoForm">
+      <input id="videoUrl" type="url"
+        placeholder="Paste video URL here..."
+        aria-label="Video URL" required>
+      <button type="submit">Get Video</button>
+    </form>
+
+    <div id="result" aria-live="polite"></div>
+    <p class="note">
+      Only download videos you own or have permission to save.
+      Social-media links may require the original platform.
+    </p>
+  </main>
+
+  <script>
+    document.getElementById("videoForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const url = document.getElementById("videoUrl").value.trim();
+      const result = document.getElementById("result");
+
+      try {
+        const parsed = new URL(url);
+        if (!["http:", "https:"].includes(parsed.protocol)) {
+          throw new Error("Invalid URL");
+        }
+
+        result.replaceChildren();
+
+        const link = document.createElement("a");
+        link.href = parsed.href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className = "download";
+        link.textContent = "Open Video Link";
+        result.appendChild(link);
+
+        const message = document.createElement("p");
+        message.textContent =
+          "If this is a direct video file, you may be able to save it from the opened page.";
+        result.appendChild(message);
+      } catch {
+        result.textContent = "Please enter a valid video URL.";
+      }
+    });
+  </script>
+</body>
+</html>
